@@ -7,9 +7,12 @@ import java.util.Scanner;
 
 public class Workout {
 
-    List<Exercise> workoutAList = new ArrayList<>();
-    List<Exercise> workoutBList = new ArrayList<>();
-    List<String> workoutsCompletedList = new ArrayList<>();
+    private List<Exercise> workoutAList = new ArrayList<>();
+    private List<Exercise> workoutBList = new ArrayList<>();
+    private List<String> workoutsCompletedList = new ArrayList<>();
+    private Scanner scan = new Scanner(System.in);
+    private List<Exercise> currentWorkout = workoutAList;
+    private List<Exercise> nextWorkout = workoutBList;
 
     public Workout(){
     }
@@ -24,7 +27,7 @@ public class Workout {
         workoutBList.add(new Exercise("Deadlift      ", 5, 1, 95, 10));
     }
 
-    public void activeWorkout(Scanner scan, List<Exercise> currentWorkout) {
+    public void activeWorkout() {
         for (Exercise exercise : currentWorkout) {
             int i = 0;
             exercise.repsCompleted = new int[exercise.sets];
@@ -41,9 +44,9 @@ public class Workout {
         }
     }
 
-    public void completeWorkout(Workout workout, List<Exercise> currentWorkout) {
+    public void completeWorkout() {
         for (Exercise exercise : currentWorkout) {
-            workout.workoutsCompletedList.add(exercise.name + " " + exercise.weight + "  |  " + Arrays.toString(exercise.repsCompleted));
+            workoutsCompletedList.add(exercise.name + " " + exercise.weight + "  |  " + Arrays.toString(exercise.repsCompleted));
             System.out.println(exercise);
             exercise.repsCompleted = new int[exercise.sets];
             if (exercise.totalRepsCompleted >= (exercise.sets * exercise.repsExpected)) {
@@ -52,10 +55,9 @@ public class Workout {
         }
     }
 
-    public void displayCompletedWorkouts(Workout workout) {
+    public void displayCompletedWorkouts() {
         System.out.println("Completed Workouts");
         System.out.println("__________________\n");
-        List<String> workoutsCompletedList = workout.workoutsCompletedList;
         for (int i = 0; i < workoutsCompletedList.size(); i++) {
             String exercise = workoutsCompletedList.get(i);
             System.out.println(exercise);
@@ -64,11 +66,11 @@ public class Workout {
         }
     }
 
-    public void runWorkoutApp(Scanner scan, Workout workout, List<Exercise> currentWorkout, List<Exercise> nextWorkout) {
+    public void runWorkoutApp() {
         List<Exercise> workoutListHolder;
         while(true) {
-            workout.activeWorkout(scan, currentWorkout);
-            workout.completeWorkout(workout, currentWorkout);
+            activeWorkout();
+            completeWorkout();
             System.out.println("\nNext Workout: ");
             for (Exercise exercise : nextWorkout) {
                 System.out.println(exercise.name + " " + exercise.weight + " lbs");
@@ -80,7 +82,7 @@ public class Workout {
             System.out.println("Continue to next workout?  Y/N ");
             String input2 = scan.nextLine();
             if(input2.equalsIgnoreCase("N")){
-                workout.displayCompletedWorkouts(workout);
+                displayCompletedWorkouts();
                 break;
             }
         }
